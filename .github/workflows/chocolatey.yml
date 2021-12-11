@@ -1,0 +1,48 @@
+name: Update Chocolatey
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version + Date'
+        required: true
+        default: 1.X.0.XXXXXXXX
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  chocolatey:
+    name: Deploy to chocolatey.org
+    runs-on: windows-latest
+    if: github.repository == 'OpenChrom/OpenChromChocolateyPackage'
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v2
+
+      - name: Set Checksum
+        id: checksum
+        run: |
+          filename="Op-${{ github.event.inputs.tag }}-x64.exe"
+          url="https://products.lablicate.com/openchrom/1.4.x/openchrom-lablicate_win32.x86_64_1.4.x.zip"
+          curl -sSL "${url}" -o "packaging/windows/${filename}"
+          sha256=$(cat "packaging/windows/${filename}" | sha256sum -)
+          sed -i "s/{SHA256CHECKSUM}/${sha256:0:64}/g" "tools/chocolateyinstall.ps1"
+
+      - name: Set Version
+        id: version
+        run: |
+          tag=${{ github.event.inputs.tag }}
+          echo "::set-output name=nuget::$version"
+          sed -i "s/{VERSION}/${version}/g" "openchrom.nuspec"
+
+      - name: Pack Release
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: pack openchrom.nuspec --outputdirectory release
+
+      - name: Upload Release
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: push openchrom.${{ steps.version.outputs.nuget }}.nupkg -s https://push.chocolatey.org/ -k ${{ secrets.CHOCO_KEY }}
