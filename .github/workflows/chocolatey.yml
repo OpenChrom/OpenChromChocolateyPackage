@@ -41,7 +41,7 @@ jobs:
       - name: Pack Release
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: pack openchrom.nuspec --outputdirectory release
+          args: pack openchrom.nuspec
 
       - name: Upload Release
         uses: crazy-max/ghaction-chocolatey@v1
