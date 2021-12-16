@@ -34,6 +34,7 @@ jobs:
         id: version
         run: |
           tag=${{ github.event.inputs.tag }}
+          version="${tag:0:14}"
           echo "::set-output name=nuget::$version"
           sed -i "s/{VERSION}/${version}/g" "openchrom.nuspec"
 
