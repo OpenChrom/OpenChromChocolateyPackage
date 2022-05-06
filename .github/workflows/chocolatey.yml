@@ -6,7 +6,7 @@ on:
       tag:
         description: 'Version + Date'
         required: true
-        default: 1.X.0.XXXXXXXX
+        default: 1.5.0.XXXXXXXX
 
 defaults:
   run:
