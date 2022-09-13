@@ -1,7 +1,10 @@
 $ErrorActionPreference = 'Stop'
 
+$toolsDir = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
+$FolderOfPackage = Split-Path -Parent $toolsDir
+
 # The installer doesn't remove previous versions, so there could be multiple "installs"
-$InstallDirs = Get-ChildItem $env:ChocolateyPackageFolder | 
+$InstallDirs = Get-ChildItem $FolderOfPackage | 
                   Where-Object {($_.psiscontainer) -and ($_.name -match $env:ChocolateyPackageName)}
 
 # Delete all Start Menu links associated with OpenCrom
