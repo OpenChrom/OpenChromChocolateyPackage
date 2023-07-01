@@ -39,11 +39,9 @@ jobs:
           sed -i "s/{VERSION}/${version}/g" "openchrom.nuspec"
 
       - name: Pack Release
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: pack openchrom.nuspec
+        run: |
+          choco pack pack openchrom.nuspec
 
       - name: Upload Release
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: push openchrom.${{ steps.version.outputs.nuget }}.nupkg -s https://push.chocolatey.org/ -k ${{ secrets.CHOCO_KEY }}
+        run: |
+          choco push openchrom.${{ steps.version.outputs.nuget }}.nupkg -s https://push.chocolatey.org/ -k ${{ secrets.CHOCO_KEY }}
