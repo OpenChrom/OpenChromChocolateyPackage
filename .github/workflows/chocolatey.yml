@@ -43,7 +43,7 @@ jobs:
 
       - name: Pack Release
         run: |
-          choco pack pack openchrom.nuspec
+          choco pack openchrom.nuspec
 
       - name: Upload Release
         run: |
