@@ -3,10 +3,10 @@ name: Update Chocolatey
 on:
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Version + Date'
+      version:
+        description: 'Version'
         required: true
-        default: 1.5.0.XXXXXXXX
+        default: 1.5.X
 
 permissions:
   contents: read
@@ -27,8 +27,8 @@ jobs:
       - name: Set Checksum
         id: checksum
         run: |
-          filename="OpenChrom-${{ github.event.inputs.tag }}-Lablicate-x64.zip"
-          url="https://products.lablicate.com/openchrom/1.5.0/openchrom-lablicate_win32.x86_64_1.5.0.zip"
+          filename="OpenChrom-${{ github.event.inputs.version }}-Lablicate-x64.zip"
+          url="https://products.lablicate.com/openchrom/${{ github.event.inputs.version }}/openchrom-lablicate_win32.x86_64_${{ github.event.inputs.version }}.zip"
           curl -sSL "${url}" -o "${filename}"
           sha256=$(cat "${filename}" | sha256sum -)
           sed -i "s/{SHA256CHECKSUM}/${sha256:0:64}/g" "tools/chocolateyinstall.ps1"
@@ -36,10 +36,8 @@ jobs:
       - name: Set Version
         id: version
         run: |
-          tag=${{ github.event.inputs.tag }}
-          version="${tag:0:14}"
-          echo "nuget=$version" >> $GITHUB_OUTPUT
-          sed -i "s/{VERSION}/${version}/g" "openchrom.nuspec"
+          echo "nuget=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          sed -i "s/{VERSION}/${{ github.event.inputs.version }}/g" "openchrom.nuspec"
 
       - name: Pack Release
         run: |
