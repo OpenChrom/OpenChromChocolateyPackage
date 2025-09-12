@@ -37,6 +37,7 @@ jobs:
         id: version
         run: |
           echo "nuget=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          sed -i "s/{VERSION}/${{ github.event.inputs.version }}/g" "tools/chocolateyinstall.ps1"
           sed -i "s/{VERSION}/${{ github.event.inputs.version }}/g" "openchrom.nuspec"
 
       - name: Pack Release

@@ -4,7 +4,7 @@ $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
 $ZipArgs = @{
    PackageName   = $env:ChocolateyPackageName
-   url           = 'https://products.lablicate.com/openchrom/1.5.0/openchrom_win32.x86_64_1.5.0.zip'
+   url           = 'https://products.lablicate.com/openchrom/{VERSION}/openchrom_win32.x86_64_{VERSION}.zip'
    checksum      = '{SHA256CHECKSUM}'
    ChecksumType  = 'sha256'
    UnzipLocation = Join-Path (Split-Path $toolsDir) "$env:ChocolateyPackageName$env:ChocolateyPackageVersion"
