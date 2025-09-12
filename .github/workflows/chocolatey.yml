@@ -27,8 +27,8 @@ jobs:
       - name: Set Checksum
         id: checksum
         run: |
-          filename="OpenChrom-${{ github.event.inputs.version }}-Lablicate-x64.zip"
-          url="https://products.lablicate.com/openchrom/${{ github.event.inputs.version }}/openchrom-lablicate_win32.x86_64_${{ github.event.inputs.version }}.zip"
+          filename="OpenChrom-${{ github.event.inputs.version }}-x64.zip"
+          url="https://products.lablicate.com/openchrom/${{ github.event.inputs.version }}/openchrom_win32.x86_64_${{ github.event.inputs.version }}.zip"
           curl -sSL "${url}" -o "${filename}"
           sha256=$(cat "${filename}" | sha256sum -)
           sed -i "s/{SHA256CHECKSUM}/${sha256:0:64}/g" "tools/chocolateyinstall.ps1"
