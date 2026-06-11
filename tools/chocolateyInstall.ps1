@@ -12,6 +12,11 @@ $ZipArgs = @{
 
 Install-ChocolateyZipPackage @ZipArgs
 
+$iniFile = Get-ChildItem $ZipArgs.UnzipLocation -Filter 'openchrom.ini' -Recurse | Select-Object -First 1
+if ($iniFile) {
+   (Get-Content $iniFile.FullName) -replace '-Dopenchrom\.update=true', '-Dopenchrom.update=false' | Set-Content $iniFile.FullName
+}
+
 $exes = Get-ChildItem $ZipArgs.UnzipLocation | 
             Where-Object {$_.psiscontainer} | 
             ForEach-Object {Get-ChildItem $_.fullname -filter "*.exe" -Recurse}
